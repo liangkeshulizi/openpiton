@@ -154,9 +154,9 @@ print("`define L2_TAG_ARRAY_HEIGHT_LOG2 %d" % (math.log(L2_NUM_SETS, 2)))
 
 // Tag Address decomposition 
 
-`define L2_TAG_OFFSET           `L2_LINE_SIZE_WIDTH-1:0
-`define L2_TAG_INDEX            `L2_LINE_SIZE_WIDTH+`L2_TAG_INDEX_WIDTH-1:`L2_LINE_SIZE_WIDTH
-`define L2_TAG                  39:`L2_LINE_SIZE_WIDTH+`L2_TAG_INDEX_WIDTH
+`define L2_TAG_OFFSET           `L2_LINE_SIZE_WIDTH-1:0                                           // offset of a byte in a line (6-bit)
+`define L2_TAG_INDEX            `L2_LINE_SIZE_WIDTH+`L2_TAG_INDEX_WIDTH-1:`L2_LINE_SIZE_WIDTH     // index to the set (8-bit)
+`define L2_TAG                  39:`L2_LINE_SIZE_WIDTH+`L2_TAG_INDEX_WIDTH                        // tag (26-bit, for miss/hit)
 //`define L2_TAG_INDEX            13:6
 //`define L2_TAG                  39:14
 `define L2_TAG_PLUS_INDEX       39:`L2_LINE_SIZE_WIDTH
@@ -208,13 +208,13 @@ print("`define L2_DIR_ARRAY_HEIGHT_LOG2     %d" % (math.log(L2_NUM_SETS*L2_WAYS,
 `define L2_STATE_INDEX_WIDTH    `L2_TAG_INDEX_WIDTH
 `define L2_STATE_ENTRIES        (1 << `L2_TAG_INDEX_WIDTH)
 
-`define L2_MESI_BITS            `MSG_MESI_BITS
+`define L2_MESI_BITS            `MSG_MESI_BITS    // LLC MESI bit
 `define L2_MESI_I               `MSG_MESI_I
 `define L2_MESI_S               `MSG_MESI_S
 `define L2_MESI_E               `MSG_MESI_E
 `define L2_MESI_B               `MSG_MESI_M
 
-`define L2_VD_BITS              2
+`define L2_VD_BITS              2                 // LLC valid/dirty bit
 `define L2_VD_INVAL             2'b00
 `define L2_VD_CLEAN             2'b10
 `define L2_VD_DIRTY             2'b11
@@ -254,12 +254,12 @@ print("`define L2_STATE_ARRAY_HEIGHT     %d" % (L2_NUM_SETS))
 print("`define L2_STATE_ARRAY_HEIGHT_LOG2     %d" % (math.log(L2_NUM_SETS,2)))
 %>
 
-// State decomposition 
+// State decomposition (state array)
 
 `define L2_STATE_SDID           9:0
 `define L2_STATE_OWNER          5:0
 `define L2_STATE_SUBLINE        9:6
-`define L2_STATE_DI             10
+`define L2_STATE_DI             10      // data/instruction cache line
 `define L2_STATE_VD             12:11
 `define L2_STATE_MESI           14:13
 `define L2_STATE_LRU            `L2_STATE_DATA_WIDTH+`L2_WAYS-1:`L2_STATE_DATA_WIDTH
@@ -425,8 +425,10 @@ print("`define L2_STATE_ARRAY_HEIGHT_LOG2     %d" % (math.log(L2_NUM_SETS,2)))
 
 //Control Signal 
 
+// operation for directory, state_owner and state_subline
+
 `define CS_OP_WIDTH             2
-`define OP_CLR                  2'd0 
+`define OP_CLR                  2'd0
 `define OP_LD                   2'd1
 `define OP_ADD                  2'd2
 `define OP_SUB                  2'd3

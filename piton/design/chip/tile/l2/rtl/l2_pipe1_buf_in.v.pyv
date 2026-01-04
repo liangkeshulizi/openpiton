@@ -41,23 +41,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 `include "l2.tmp.h"
 `include "define.tmp.h"
 
+// Essentially a header FIFO & a data FIFO. Received messages will be stored in two FIFOs accordingly.
+
 module l2_pipe1_buf_in(
 
     input wire clk,
     input wire rst_n,
 
     input wire valid_in,
-    input wire [`NOC_DATA_WIDTH-1:0] data_in,
+    input wire [`NOC_DATA_WIDTH-1:0] data_in,                           // Receive input from NoC-1, one flit (64-bit) at a time
     output reg ready_in,
 
    
     output reg msg_header_valid_out,
-    output reg [`L2_P1_HEADER_BUF_IN_WIDTH-1:0] msg_header_out,
+    output reg [`L2_P1_HEADER_BUF_IN_WIDTH-1:0] msg_header_out,         // output entire message header (3 flits) at a time
     input wire msg_header_ready_out,
 
 
     output reg msg_data_valid_out,
-    output reg [`L2_P1_DATA_BUF_IN_WIDTH-1:0] msg_data_out,
+    output reg [`L2_P1_DATA_BUF_IN_WIDTH-1:0] msg_data_out,             // output data one flit (64-bit) at a time
     input wire msg_data_ready_out
 );
 <%
@@ -277,7 +279,7 @@ begin
 end
 
 
-reg [`NOC_DATA_WIDTH-1:0] header_buf_mem_f [`L2_P1_HEADER_BUF_IN_SIZE-1:0];
+reg [`NOC_DATA_WIDTH-1:0] header_buf_mem_f [`L2_P1_HEADER_BUF_IN_SIZE-1:0];         // buffer memory for message headers (64x8)
 reg header_buf_empty;
 reg header_buf_full;
 reg [`L2_P1_HEADER_BUF_IN_LOG_SIZE:0] header_buf_counter_f;
@@ -385,6 +387,7 @@ begin
    msg_header_ready_in = !header_buf_full;
 end
 
+// Only receive requests from L15 cache, so message header is always 3 flits.
 
 always @ *
 begin
@@ -417,7 +420,7 @@ end
 
 
 
-reg [`NOC_DATA_WIDTH-1:0] data_buf_mem_f [`L2_P1_DATA_BUF_IN_SIZE-1:0];
+reg [`NOC_DATA_WIDTH-1:0] data_buf_mem_f [`L2_P1_DATA_BUF_IN_SIZE-1:0];                 // buffer memory for message data (64x4)
 reg data_buf_empty;
 reg data_buf_full;
 reg [`L2_P1_DATA_BUF_IN_LOG_SIZE:0] data_buf_counter_f;
@@ -512,6 +515,8 @@ begin
    msg_data_ready_in = !data_buf_full;
 end
 
+
+// Output data one flit at a time, so valid is always high as long as FIFO is not empty.
 
 always @ *
 begin

@@ -508,7 +508,7 @@ begin
         `MSG_TYPE_LOAD_FWDACK:
         begin
             case (l2_way_state_mesi_S2)
-            `L2_MESI_E:
+            `L2_MESI_E:                     // E state
             begin
                 if (is_last_subline_S2)
                 begin
@@ -571,7 +571,7 @@ begin
                     else
                     `endif
                     begin
-                        if (subline_valid_S2)   
+                        if (subline_valid_S2)           // E -> S, clean->dirty, write data, write dirctory, clear state owner
                         begin
                             if (msg_length_S2_f != 0)
                             begin
@@ -580,7 +580,7 @@ begin
                                 cs_S2 = {y,     y,         wr,         n,        y,         `OP_CLR,     n,           `OP_CLR,    n, 
                                 //       state   state          state    state           state   state
                                 //       vd_en   vd             mesi_en  mesi            lru_en  lru
-                                         y,      `L2_VD_DIRTY,  y,      `L2_MESI_S,      n,      `L2_LRU_CLR};  
+                                         y,      `L2_VD_DIRTY,  y,      `L2_MESI_S,      n,      `L2_LRU_CLR};          // doesn't count as an update of the line in LRU algorithm
                             end     
                             else
                             begin       
@@ -619,12 +619,12 @@ begin
                     end
                 end  
             end
-            `L2_MESI_I:
-            begin
+            `L2_MESI_I:                     // I state
+            begin                           // I->I, not doing anything (Why is this possible???)
                 cs_S2 = {n,     n,         rd,         n,       n,         `OP_CLR,      n,           `OP_CLR,    n,       
                          n,      `L2_VD_ERROR,  n,      `L2_MESI_I,  n,      `L2_LRU_CLR};
             end
-            default:
+            default:                        // What about M state???
             begin
                 cs_S2 = {`CS_SIZE_P2S2{1'bx}};
             end
@@ -836,7 +836,7 @@ begin
     data_rdw_en_S2 = wr;
 end
 */
-assign data_rdw_en_S2 = wr;
+assign data_rdw_en_S2 = wr;         // ?? always write data
 
 
 always @ *

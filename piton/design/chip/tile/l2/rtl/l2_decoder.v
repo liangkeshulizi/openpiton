@@ -43,8 +43,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 module l2_decoder(
 
+    // message header, max 3 flits (coherence request)
     input wire [`MSG_HEADER_WIDTH-1:0] msg_header,
 
+    // decoded info from message header
     output reg [`MSG_TYPE_WIDTH-1:0] msg_type,
     output reg [`MSG_LENGTH_WIDTH-1:0] msg_length,
     output reg [`MSG_MSHRID_WIDTH-1:0] msg_mshrid,

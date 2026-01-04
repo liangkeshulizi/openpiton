@@ -985,7 +985,7 @@ l2_encoder encoder(
     .msg_src_fbits              (my_nodeid[`NOC_NODEID_FBITS]),
     .msg_sdid                   ({`MSG_SDID_WIDTH{1'b0}}),
     .msg_lsid                   ({`MSG_LSID_WIDTH{1'b0}}),
-    .msg_header                 (msg_send_header)
+    .msg_header                 (msg_send_header)                       // Generate message header from the message info
 );
 
 

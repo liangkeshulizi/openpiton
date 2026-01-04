@@ -350,7 +350,7 @@ begin
         amo_mask_S1 = mshr_amo_mask_S1;
         recycled_S1 = mshr_recycled_S1;
 `else
-        addr_S1 = pending_mshr_addr_S1;
+        addr_S1 = pending_mshr_addr_S1;     // address from pending mshr request
         mshrid_S1 = pending_mshr_mshrid_S1;
         src_chipid_S1 = pending_mshr_src_chipid_S1;
         src_x_S1 = pending_mshr_src_x_S1;
@@ -364,7 +364,7 @@ begin
     end
     else
     begin
-        addr_S1 = msg_addr_S1;
+        addr_S1 = msg_addr_S1;              // address from decoded incoming message
         mshrid_S1 = msg_mshrid_S1;
         src_chipid_S1 = msg_src_chipid_S1;
         src_x_S1 = msg_src_x_S1;
@@ -579,6 +579,8 @@ end
 
 wire [`L2_OWNER_BITS-1:0] flat_id_S2;
 
+// Convert ID from xy format to flat, for encoding sharer information in directory
+
 xy_to_flat_id flat_id_gen(
     .flat_id    (flat_id_S2),
     .x_coord    (src_x_S2_f),
@@ -687,6 +689,8 @@ for i in range(L2_WAYS):
 
 
 wire l2_tag_cmp_hit_S2;
+
+// Read the tag array and retrieve the hit result
 
 <%
 
@@ -800,7 +804,7 @@ begin
     end
     else
     begin
-        l2_way_sel_S2 = l2_evict_way_sel_S2;
+        l2_way_sel_S2 = l2_evict_way_sel_S2;            // Choose eviction way based on psedu-LRU algorithm
     end
 end
 
@@ -812,6 +816,8 @@ begin
     begin
         l2_evict_S2 = 1'b0;
     end
+    
+    // tag didn't hit and the chosen eviction way is valid
     else if (!l2_tag_hit_S2 && (state_way_S2[l2_way_sel_S2][`L2_STATE_VD] == `L2_VD_CLEAN ||
         state_way_S2[l2_way_sel_S2][`L2_STATE_VD] == `L2_VD_DIRTY))
     begin
@@ -961,10 +967,10 @@ begin
         begin
             dir_data_in_S2 = {sdid_S2_f, src_chipid_S2_f, src_y_S2_f,src_x_S2_f};
         end
-        else
+        else        // OP_ADD
         `endif
         begin
-            dir_data_in_S2 = {`L2_DIR_ARRAY_WIDTH{1'b1}};
+            dir_data_in_S2 = {`L2_DIR_ARRAY_WIDTH{1'b1}};           // All one for adding sharer
         end
     end
 end
@@ -989,10 +995,10 @@ begin
                 dir_data_mask_in_S2 = {{(`L2_DIR_ARRAY_WIDTH-1){1'b0}},1'b1} << lsid_S2_f;
             end
         end
-        else
+        else            // OP_ADD
         `endif
         begin
-            dir_data_mask_in_S2 = {{(`L2_DIR_ARRAY_WIDTH-1){1'b0}},1'b1} << flat_id_S2;
+            dir_data_mask_in_S2 = {{(`L2_DIR_ARRAY_WIDTH-1){1'b0}},1'b1} << flat_id_S2;         // onehot vector as write mask
         end
     end
 end

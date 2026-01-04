@@ -816,6 +816,7 @@ assign mshr_data_mask_in_S3 = {1'b1, {(`L2_MSHR_ARRAY_WIDTH-1){1'b0}}};
 `ifndef SYNTHESIS
     
 
+// Stage 1
 always @ (posedge clk)
 begin
     if (valid_S1 && !stall_S1)
@@ -833,6 +834,7 @@ begin
 end
 
 
+// Stage 2
 always @ (posedge clk)
 begin
     if (valid_S2 && !stall_S2)
@@ -857,7 +859,6 @@ begin
         $display("State data mask: 0x%h", state_data_mask_in_S2);
     end
 end
-
 
 
 

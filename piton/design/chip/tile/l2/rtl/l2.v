@@ -397,7 +397,7 @@ l2_tag_wrap tag_wrap(
     .rst_n                  (rst_n),
     .pdout_en               (1'b0),
     .deepsleep              (1'b0),
-    .pipe_sel               (active_S1),
+    .pipe_sel               (active_S1),            // 0 for pipe1, 1 for pipe2
 
     .clk_en1                (tag_clk_en_p1),
     .rdw_en1                (tag_rdw_en_p1),
@@ -564,9 +564,9 @@ l2_pipe1 pipe1(
     .pipe2_addr_S1          (pipe2_addr_S1),
     .pipe2_addr_S2          (pipe2_addr_S2),
     .pipe2_addr_S3          (pipe2_addr_S3),
-    .global_stall_S1        (active_S1),
-    .global_stall_S2        (active_S2),
-    .global_stall_S4        (active_S3),
+    .global_stall_S1        (active_S1),                // input, prioritize pipe2
+    .global_stall_S2        (active_S2),                // input
+    .global_stall_S4        (active_S3),                // input
 
     .mshr_hit               (mshr_hit),
 `ifdef NO_L2_CAM_MSHR
@@ -753,9 +753,9 @@ l2_pipe2 pipe2(
     .addr_S1                (pipe2_addr_S1),
     .addr_S2                (pipe2_addr_S2),
     .addr_S3                (pipe2_addr_S3),
-    .active_S1              (active_S1),
-    .active_S2              (active_S2),
-    .active_S3              (active_S3)
+    .active_S1              (active_S1),                // output
+    .active_S2              (active_S2),                // output
+    .active_S3              (active_S3)                 // output
 );
 
 endmodule

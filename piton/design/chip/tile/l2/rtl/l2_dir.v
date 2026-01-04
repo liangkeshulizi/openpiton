@@ -169,7 +169,7 @@ sram_l2_dir l2_dir_array(
     .A          (addr),
     .DIN        (data_in),
     .RDWEN      (rdw_en),
-    .BW         (data_mask_in),
+    .BW         (data_mask_in),         // Bit Write: A per-bit mask for write operation
 
     .DOUT       (data_out),
     .BIST_COMMAND(rtap_srams_bist_command),

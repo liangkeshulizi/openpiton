@@ -131,7 +131,7 @@ l2_state l2_state(
     .pdata_out      (pdata_out),
 
     // sram interfaces
-    .srams_rtap_data (srams_rtap_data),
+    .srams_rtap_data (srams_rtap_data),                     // built-in self-test
     .rtap_srams_bist_command (rtap_srams_bist_command),
     .rtap_srams_bist_data (rtap_srams_bist_data)
 );
