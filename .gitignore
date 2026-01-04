@@ -113,3 +113,13 @@ ucli.key
 cscope.*
 tags
 *.bak
+
+# For MacOS
+.DS_Store
+
+# For Docker
+.bash_history
+.bashrc
+.python_history
+.vscode-server/
+

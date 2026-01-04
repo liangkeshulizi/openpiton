@@ -1527,6 +1527,14 @@ sub generic_sim_build
       $build_cmd .= "-Wno-fatal " ;
       $build_cmd .= "-Wno-BLKANDNBLK " ;
       $build_cmd .= "-Wno-TIMESCALEMOD " ;
+      $build_cmd .= "-Wno-PINMISSING " ;
+      $build_cmd .= "-Wno-MISINDENT " ;
+      $build_cmd .= "-Wno-WIDTHEXPAND " ;
+      $build_cmd .= "-Wno-WIDTHTRUNC " ;
+      $build_cmd .= "-Wno-IMPLICIT " ;
+      $build_cmd .= "-Wno-ASSIGNIN " ;
+      $build_cmd .= "-Wno-UNOPTFLAT " ;
+      $build_cmd .= "--timing " ;
       $build_cmd .= "-DPITON_DPI " ;
       $build_cmd .= "--unroll-count 256 " ;
       $build_cmd .= "-CFLAGS -DVERILATOR " ;
