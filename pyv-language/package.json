@@ -1,0 +1,25 @@
+{
+  "name": "pyv-language",
+  "displayName": "PyV Language Support",
+  "description": "Syntax highlighting for PyV files.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.2"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "pyv",
+      "aliases": ["PyV", "pyv"],
+      "extensions": [".pyv"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "pyv",
+      "scopeName": "source.pyv",
+      "path": "./syntaxes/pyv.tmLanguage.json"
+    }]
+  }
+}

@@ -1,0 +1,31 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "PyV",
+	"scopeName": "source.pyv",
+	"patterns": [
+		{
+		"include": "#python-block"
+		},
+		{
+		"include": "source.systemverilog"
+		}
+	],
+	"repository": {
+		"python-block": {
+		"name": "meta.embedded.block.python.pyv",
+		"begin": "<%",
+		"end": "%>",
+		"beginCaptures": {
+			"0": { "name": "punctuation.section.embedded.begin.pyv" }
+		},
+		"endCaptures": {
+			"0": { "name": "punctuation.section.embedded.end.pyv" }
+		},
+		"patterns": [
+			{
+			"include": "source.python"
+			}
+		]
+		}
+	}
+}
